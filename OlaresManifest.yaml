@@ -7,21 +7,22 @@ metadata:
   icon: https://raw.githubusercontent.com/bayerhazard/aimighty-reranker/main/icon.png
   description: Qwen3-Reranker-0.6B via vllm
   appid: aimrerqwen3vllm
-  title: Qwen3 Reranker 0.6B
-  version: '1.5.1'
+  title: Qwen3 Reranker 0.6B vLLM AIM
+  version: '1.5.2'
   categories:
     - AI
 entrances:
   - name: aimrerqwen3vllm
     port: 8080
     host: aimrerqwen3vllm
-    title: Qwen3 Reranker 0.6B
+    title: Qwen3 Reranker 0.6B vLLM AIM
     icon: https://raw.githubusercontent.com/bayerhazard/aimighty-reranker/main/icon.png
     openMethod: window
     authLevel: internal
 spec:
-  versionName: '1.5.1'
+  versionName: '1.5.2'
   upgradeDescription: |
+    v1.5.2: Fixed app title to Qwen3 Reranker 0.6B vLLM AIM (was Qwen3 Reranker 0.6B). Proper labeling in Market and Settings.
     v1.5.1: Fixed title to show readable app name in Olares Settings. Qwen3 Reranker 0.6B.
     v1.5.0: Version bump to force Olares re-sync.
     v1.3.5: Tailored Blackwell SM120 GPU optimization (FlashInfer attention + FP8 KV-cache).
