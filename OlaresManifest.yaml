@@ -7,22 +7,23 @@ metadata:
   icon: https://raw.githubusercontent.com/bayerhazard/aimighty-reranker/main/icon.png
   description: Qwen3-Reranker-0.6B via vllm
   appid: aimrerqwen3vllm
-  title: Qwen3 Reranker
-  version: '1.6.2'
+  title: AIM Qwen3 Reranker
+  version: '1.6.3'
   categories:
     - AI
+    - Developer Tools
 entrances:
   - name: aimrerqwen3vllm
     port: 8080
     host: aimrerqwen3vllm
-    title: Qwen3 Reranker
+    title: AIM Qwen3 Reranker
     icon: https://raw.githubusercontent.com/bayerhazard/aimighty-reranker/main/icon.png
     openMethod: window
     authLevel: internal
 spec:
-  versionName: '1.6.2'
+  versionName: '1.6.3'
   upgradeDescription: |
-    v1.6.2: Fixed chart encoding (was double-gzip, broke Olares tar extraction). v1.6.1: Fixed corrupted chart in market source (base64 truncation). v1.6.0: Version bump to force Olares re-sync with fresh chart encoding. v1.5.5: Release v1.5.5. Final naming corrections and entrance status fix.
+    v1.6.3: Renamed to 'AIM Qwen3 Reranker'. v1.6.2: Fixed chart encoding (was double-gzip, broke Olares tar extraction). v1.6.1: Fixed corrupted chart in market source (base64 truncation). v1.6.0: Version bump to force Olares re-sync with fresh chart encoding. v1.5.5: Release v1.5.5. Final naming corrections and entrance status fix.
     v1.5.3: Fixed app title to Qwen3 Reranker for Settings display (shorter form).
     v1.5.2: Fixed app title to Qwen3 Reranker 0.6B vLLM AIM (was Qwen3 Reranker 0.6B). Proper labeling in Market and Settings.
     v1.5.1: Fixed title to show readable app name in Olares Settings. Qwen3 Reranker 0.6B.
