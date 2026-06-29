@@ -8,10 +8,9 @@ metadata:
   description: Qwen3-Reranker-0.6B via vllm
   appid: aimrerqwen3vllm
   title: AIM Qwen3 Reranker
-  version: '1.6.3'
+  version: '1.6.4'
   categories:
-    - AI
-    - Developer Tools
+    - AI Agents
 entrances:
   - name: aimrerqwen3vllm
     port: 8080
