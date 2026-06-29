@@ -7,15 +7,15 @@ metadata:
   icon: https://raw.githubusercontent.com/bayerhazard/aimighty-reranker/main/icon.png
   description: Qwen3-Reranker-0.6B via vllm
   appid: aimrerqwen3vllm
-  title: AIM Qwen3 Reranker
-  version: '1.6.4'
+  title: Qwen3 Reranker
+  version: '1.6.5'
   categories:
     - AI Agents
 entrances:
   - name: aimrerqwen3vllm
     port: 8080
     host: aimrerqwen3vllm
-    title: AIM Qwen3 Reranker
+    title: Qwen3 Reranker
     icon: https://raw.githubusercontent.com/bayerhazard/aimighty-reranker/main/icon.png
     openMethod: window
     authLevel: internal
