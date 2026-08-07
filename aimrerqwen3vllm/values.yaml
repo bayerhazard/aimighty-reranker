@@ -30,7 +30,7 @@ nginxResources:
     memory: 32Mi
 env:
   HF_HOME: /root/.cache/huggingface
-  CUDA_DEVICE_MEMORY_LIMIT_0: "3072m"
+  CUDA_DEVICE_MEMORY_LIMIT_0: "3584m"
 vllmArgs:
   model: tomaarsen/Qwen3-Reranker-0.6B-seq-cls
   dtype: bfloat16

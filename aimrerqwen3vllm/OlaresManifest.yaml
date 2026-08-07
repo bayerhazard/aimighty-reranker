@@ -11,7 +11,7 @@ metadata:
   description: Qwen3-Reranker-0.6B via vLLM — native /v1/rerank (Jina/Cohere compatible)
   appid: aimrerqwen3vllm
   title: AIM Qwen3 0.6B Reranker
-  version: '26.08.2'
+  version: '26.08.3'
   categories:
     - AI
 
@@ -25,8 +25,9 @@ entrances:
     authLevel: internal
 
 spec:
-  versionName: '26.08.2'
+  versionName: '26.08.3'
   upgradeDescription: |
+    v26.08.3: Safety-Marge Boot — CUDA_DEVICE_MEMORY_LIMIT_0 3072m->3584m (~560 MiB Headroom statt ~50 MiB; Boot-Profil: 1.12 GiB Weights + 1.25 GiB KV + 0.3 GiB Activation + 0.25 GiB Context). Budget worker GPU: TTS 13.4 + ASR 5.5 + Reranker 3.5 = ~22.5 of 24.4 GiB. Built for Olares 1.12.6.
     v26.08.1: Unified naming — title "AIM Qwen3 0.6B Reranker", English descriptions. Built for Olares 1.12.6.
     v1.9.0: Dashboard restyled to the Rewind design (Hanseatenblau + gold accent), German default with DE/EN toggle, Rerank test card, live metrics, removed API URL line.
     v1.8.0: Move to worker GPU (MemorySlice) — CUDA_DEVICE_MEMORY_LIMIT_0=3072m (3 GiB, required in MemorySlice mode; 0m blocks cudaMalloc) + gpu_memory_utilization 0.15 -> 0.9 (0.15 x 3 GiB < 1.12 GiB model -> no KV cache). Co-resides with voxtral (13 GiB) + ASR (6 GiB) = 22 of 23.88 GiB.

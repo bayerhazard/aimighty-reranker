@@ -11,7 +11,7 @@ metadata:
   description: Qwen3-Reranker-0.6B via vLLM — native /v1/rerank (Jina/Cohere compatible)
   appid: aimrerqwen3vllm
   title: AIM Qwen3 0.6B Reranker
-  version: '26.08.1'
+  version: '26.08.3'
   categories:
     - AI
 entrances:
@@ -23,7 +23,7 @@ entrances:
     openMethod: window
     authLevel: internal
 spec:
-  versionName: '26.08.1'
+  versionName: '26.08.3'
   upgradeDescription: |
     v1.6.3: Renamed to 'AIM Qwen3 Reranker'. v1.6.2: Fixed chart encoding (was double-gzip, broke Olares tar extraction). v1.6.1: Fixed corrupted chart in market source (base64 truncation). v1.6.0: Version bump to force Olares re-sync with fresh chart encoding. v1.5.5: Release v1.5.5. Final naming corrections and entrance status fix.
     v1.5.3: Fixed app title to Qwen3 Reranker for Settings display (shorter form).
@@ -78,6 +78,6 @@ options:
   apiTimeout: 3600
   dependencies:
     - name: olares
-      version: '>=1.12.2-0'
+      version: '>=1.12.6-0'
       type: system
   allowMultipleInstall: false
