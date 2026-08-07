@@ -8,22 +8,22 @@ workloadReplicas:
 metadata:
   name: aimrerqwen3vllm
   icon: https://raw.githubusercontent.com/bayerhazard/aimighty-reranker/main/icon.png
-  description: Qwen3-Reranker-0.6B via vllm
+  description: Qwen3-Reranker-0.6B via vLLM — native /v1/rerank (Jina/Cohere compatible)
   appid: aimrerqwen3vllm
-  title: Qwen3 Reranker
-  version: '1.9.0'
+  title: AIM Qwen3 0.6B Reranker
+  version: '26.08.1'
   categories:
-    - AI Agents
+    - AI
 entrances:
   - name: aimrerqwen3vllm
     port: 8080
     host: aimrerqwen3vllm
-    title: Qwen3 Reranker
+    title: AIM Qwen3 0.6B Reranker
     icon: https://raw.githubusercontent.com/bayerhazard/aimighty-reranker/main/icon.png
     openMethod: window
     authLevel: internal
 spec:
-  versionName: '1.9.0'
+  versionName: '26.08.1'
   upgradeDescription: |
     v1.6.3: Renamed to 'AIM Qwen3 Reranker'. v1.6.2: Fixed chart encoding (was double-gzip, broke Olares tar extraction). v1.6.1: Fixed corrupted chart in market source (base64 truncation). v1.6.0: Version bump to force Olares re-sync with fresh chart encoding. v1.5.5: Release v1.5.5. Final naming corrections and entrance status fix.
     v1.5.3: Fixed app title to Qwen3 Reranker for Settings display (shorter form).

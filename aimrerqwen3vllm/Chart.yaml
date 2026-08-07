@@ -1,6 +1,6 @@
 apiVersion: v2
-appVersion: 1.7.0
-description: Qwen3-Reranker-0.6B via vllm on NVIDIA RTX 5090 (Blackwell)
+appVersion: 26.08.1
+description: Qwen3-Reranker-0.6B via vLLM — native /v1/rerank (Jina/Cohere compatible)
 home: https://github.com/bayerhazard/aimighty-reranker
 keywords:
 - ai
@@ -16,4 +16,4 @@ name: aimrerqwen3vllm
 sources:
 - https://github.com/bayerhazard/aimighty-reranker
 type: application
-version: 1.9.0
+version: 26.08.1
