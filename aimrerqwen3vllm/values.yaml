@@ -1,9 +1,12 @@
 image:
   repository: vllm/vllm-openai
-  tag: latest
+  tag: v0.26.0-cu129
   pullPolicy: IfNotPresent
 nginx:
   image: nginx:alpine
+workloads:
+  aimrerqwen3vllm:
+    replicaCount: 1
 replicaCount: 1
 revisionHistoryLimit: 1
 apiPort: 30000
@@ -25,23 +28,13 @@ nginxResources:
   requests:
     cpu: 50m
     memory: 32Mi
-proxy:
-  image: python:3.12-slim
-  imagePullPolicy: IfNotPresent
-  port: 30001
-  resources:
-    limits:
-      cpu: 500m
-      memory: 256Mi
-    requests:
-      cpu: 100m
-      memory: 128Mi
 env:
   HF_HOME: /root/.cache/huggingface
+  CUDA_DEVICE_MEMORY_LIMIT_0: "3072m"
 vllmArgs:
   model: tomaarsen/Qwen3-Reranker-0.6B-seq-cls
   dtype: bfloat16
-  gpuMemoryUtilization: '0.15'
+  gpuMemoryUtilization: '0.9'
   maxModelLen: '8192'
   maxNumSeqs: '4'
   servedModelName: Qwen/Qwen3-Reranker-0.6B

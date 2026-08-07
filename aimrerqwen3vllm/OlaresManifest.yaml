@@ -1,17 +1,21 @@
----
-olaresManifest.version: '0.10.0'
+olaresManifest.version: '0.12.0'
 olaresManifest.type: app
-apiVersion: 'v2'
+apiVersion: 'v3'
+
+workloadReplicas:
+  aimrerqwen3vllm: 1
+
 metadata:
   name: aimrerqwen3vllm
   icon: https://raw.githubusercontent.com/bayerhazard/aimighty-reranker/main/icon.png
   description: Qwen3-Reranker-0.6B via vllm
   appid: aimrerqwen3vllm
   title: AIM Qwen3 Reranker
-  version: '1.6.3'
+  version: '1.9.0'
   categories:
     - AI
     - Developer Tools
+
 entrances:
   - name: aimrerqwen3vllm
     port: 8080
@@ -20,10 +24,13 @@ entrances:
     icon: https://raw.githubusercontent.com/bayerhazard/aimighty-reranker/main/icon.png
     openMethod: window
     authLevel: internal
+
 spec:
-  versionName: '1.6.3'
+  versionName: '1.9.0'
   upgradeDescription: |
-    v1.6.3: Renamed to 'AIM Qwen3 Reranker'. v1.6.2: Fixed chart encoding (was double-gzip, broke Olares tar extraction). v1.6.1: Fixed corrupted chart in market source (base64 truncation). v1.6.0: Version bump to force Olares re-sync with fresh chart encoding. v1.5.5: Release v1.5.5. Final naming corrections and entrance status fix.
+    v1.9.0: Dashboard restyled to the Rewind design (Hanseatenblau + gold accent), German default with DE/EN toggle, Rerank test card, live metrics, removed API URL line.
+    v1.8.0: Move to worker GPU (MemorySlice) — CUDA_DEVICE_MEMORY_LIMIT_0=3072m (3 GiB, required in MemorySlice mode; 0m blocks cudaMalloc) + gpu_memory_utilization 0.15 -> 0.9 (0.15 x 3 GiB < 1.12 GiB model -> no KV cache). Co-resides with voxtral (13 GiB) + ASR (6 GiB) = 22 of 23.88 GiB.
+    v1.7.0: Native vLLM rerank — removed Python rerank-proxy sidecar. vLLM v0.26.0-cu129 with built-in /v1/rerank (Jina/Cohere compatible) serving Qwen3-Reranker-0.6B-seq-cls directly. Pinned immutable image tag. Fixed pod owner label (HAMi GPU binding). v1.6.3: Renamed to 'AIM Qwen3 Reranker'. v1.6.2: Fixed chart encoding (was double-gzip, broke Olares tar extraction). v1.6.1: Fixed corrupted chart in market source (base64 truncation). v1.6.0: Version bump to force Olares re-sync with fresh chart encoding. v1.5.5: Release v1.5.5. Final naming corrections and entrance status fix.
     v1.5.1: Fixed title to show readable app name in Olares Settings. Qwen3 Reranker 0.6B.
     v1.5.0: Version bump to force Olares re-sync.
     v1.3.5: Tailored Blackwell SM120 GPU optimization (FlashInfer attention + FP8 KV-cache).
@@ -39,21 +46,16 @@ spec:
     v1.1.3: Fixed OlaresManifest structure to match Olares spec v0.10.0. Moved resource fields to spec section. Fixed manifest version compatibility.
     v1.1.1: Fixed missing icon in installed apps. Added icon URL to entrances and switched to raw.githubusercontent.com CDN.
     v1.1.0: Switched inference engine from SGLang to vllm. Renamed app to aimrerqwen3vllm. Updated all metadata and chart to reflect vllm backend.
-    v1.0.9: Fix PROXY_INBOUND iptables chain is now created before rules are inserted (fixes CrashLoopBackOff on restart).
-    v1.0.8: Fix owner label value in Deployment metadata is now "aimighty" (was the app name).
-    v1.0.7: Added owner+raw-app-name labels to Deployment metadata. from SGLang to vllm. Renamed app to aimrerqwen3vllm. Updated all metadata and chart to reflect vllm backend.
-    v1.0.9: Fix PROXY_INBOUND iptables chain is now created before rules are inserted (fixes CrashLoopBackOff on restart).
-    v1.0.8: Fix owner label value in Deployment metadata is now "aimighty" (was the app name).
-    v1.0.7: Added owner+raw-app-name labels to Deployment metadata.
   fullDescription: |
-    Aimighty Reranker deploys Qwen3-Reranker-0.6B using vllm on NVIDIA RTX 5090 (Blackwell).
+    Aimighty Reranker deploys Qwen3-Reranker-0.6B using vLLM on NVIDIA RTX 5090 (Blackwell).
 
     **Features**
-    - /v1/rerank endpoint (OpenAI-compatible)
+    - /v1/rerank endpoint (native vLLM, Jina/Cohere compatible)
     - Live monitoring dashboard on port 8080
-    - FlashInfer attention backend optimized for SM120
+    - vLLM v0.26.0-cu129 (pinned, immutable)
     - Prometheus metrics via /metrics
     - Optimized: 4 GB GPU, 12 GB RAM
+    - 2 containers only (vLLM + dashboard); no proxy sidecar
 
     **Resource Usage**
     GPU: 4 GB VRAM (NVIDIA RTX 5090 or compatible)
@@ -67,19 +69,20 @@ spec:
     - en-US
   supportArch:
     - amd64
-  limitedCpu: 4
-  requiredCpu: 1
+  requiredCpu: "1"
+  limitedCpu: "4"
   requiredMemory: 4Gi
   limitedMemory: 12Gi
   requiredDisk: 10Gi
-  requiredGpu: 1Gi
-  limitedGpu: 24Gi
+  requiredGpu: 1
+
 permission:
   appData: true
+
 options:
   apiTimeout: 3600
+  allowMultipleInstall: false
   dependencies:
     - name: olares
-      version: '>=1.12.2-0'
+      version: '>=1.12.6-0'
       type: system
-  allowMultipleInstall: false

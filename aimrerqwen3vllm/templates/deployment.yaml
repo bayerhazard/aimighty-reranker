@@ -10,7 +10,7 @@ metadata:
     applications.app.bytetrade.io/owner: aimighty
     applications.app.bytetrade.io/raw-app-name: aimrerqwen3vllm
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.workloads.aimrerqwen3vllm.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   selector:
     matchLabels:
@@ -22,7 +22,7 @@ spec:
       labels:
         app: aimrerqwen3vllm
         applications.app.bytetrade.io/name: aimrerqwen3vllm
-        applications.app.bytetrade.io/owner: {{ .Release.Namespace | trimSuffix "-aimighty" }}
+        applications.app.bytetrade.io/owner: aimighty
         applications.app.bytetrade.io/raw-app-name: aimrerqwen3vllm
         io.bytetrade.app: "true"
     spec:
@@ -47,14 +47,13 @@ spec:
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
       containers:
-      # vllm Inference Engine
+      # vllm Inference Engine (native /v1/rerank, no proxy)
       - name: aimrerqwen3vllm
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         command:
-        - python3
-        - -m
-        - vllm.entrypoints.openai.api_server
+        - vllm
+        - serve
         args:
         - --model
         - {{ .Values.vllmArgs.model }}
@@ -74,10 +73,6 @@ spec:
         - {{ .Values.vllmArgs.servedModelName }}
         - --trust-remote-code
         - --no-enable-log-requests
-        - --attention-backend
-        - flashinfer
-        - --kv-cache-dtype
-        - fp8
         env:
         {{- range $key, $value := .Values.env }}
         - name: {{ $key }}
@@ -98,31 +93,6 @@ spec:
           {{- toYaml .Values.livenessProbe | nindent 10 }}
         readinessProbe:
           {{- toYaml .Values.readinessProbe | nindent 10 }}
-      # Rerank Proxy (Cohere/Jina → vLLM /classify)
-      - name: rerank-proxy
-        image: "{{ .Values.proxy.image }}"
-        imagePullPolicy: {{ .Values.proxy.imagePullPolicy }}
-        command:
-          - sh
-          - -c
-          - |
-            pip install --quiet aiohttp && python3 /app/rerank_proxy.py
-        ports:
-          - containerPort: {{ .Values.proxy.port }}
-            protocol: TCP
-        resources:
-          {{- toYaml .Values.proxy.resources | nindent 10 }}
-        volumeMounts:
-          - name: proxy-config
-            mountPath: /app/rerank_proxy.py
-            subPath: rerank_proxy.py
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: {{ .Values.proxy.port }}
-          initialDelaySeconds: 15
-          periodSeconds: 5
-          failureThreshold: 6
       # nginx Dashboard
       - name: nginx
         image: "{{ .Values.nginx.image }}"
@@ -145,9 +115,6 @@ spec:
           medium: Memory
           sizeLimit: {{ .Values.volumes.dshm.sizeLimit }}
         name: dshm
-      - configMap:
-          name: aimrerqwen3vllm-proxy
-        name: proxy-config
       - configMap:
           name: aimrerqwen3vllm-dashboard
           items:
