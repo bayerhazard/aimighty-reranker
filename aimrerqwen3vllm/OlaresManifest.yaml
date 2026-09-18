@@ -11,7 +11,7 @@ metadata:
   description: Qwen3-Reranker-0.6B via vLLM — native /v1/rerank (Jina/Cohere compatible)
   appid: aimrerqwen3vllm
   title: AIM Qwen3 0.6B Reranker
-  version: '26.08.3'
+  version: '26.9.1'
   categories:
     - AI
 
@@ -25,28 +25,9 @@ entrances:
     authLevel: internal
 
 spec:
-  versionName: '26.08.3'
+  versionName: '26.9.1'
   upgradeDescription: |
-    v26.08.3: CUDA_DEVICE_MEMORY_LIMIT_0 3072m->3584m. Effekt: KV-Pool 11.664->15.888 Tokens (+36%, 1.25->1.7 GiB KV) + Boot-Marge ~50->100 MiB (vLLM wandelt Zuwachs in KV um, nicht in freien Speicher). Budget worker GPU: TTS 13.4 + ASR 5.5 + Reranker 3.5 = ~22.5 of 24.4 GiB. Built for Olares 1.12.6.
-    v26.08.1: Unified naming — title "AIM Qwen3 0.6B Reranker", English descriptions. Built for Olares 1.12.6.
-    v1.9.0: Dashboard restyled to the Rewind design (Hanseatenblau + gold accent), German default with DE/EN toggle, Rerank test card, live metrics, removed API URL line.
-    v1.8.0: Move to worker GPU (MemorySlice) — CUDA_DEVICE_MEMORY_LIMIT_0=3072m (3 GiB, required in MemorySlice mode; 0m blocks cudaMalloc) + gpu_memory_utilization 0.15 -> 0.9 (0.15 x 3 GiB < 1.12 GiB model -> no KV cache). Co-resides with voxtral (13 GiB) + ASR (6 GiB) = 22 of 23.88 GiB.
-    v1.7.0: Native vLLM rerank — removed Python rerank-proxy sidecar. vLLM v0.26.0-cu129 with built-in /v1/rerank (Jina/Cohere compatible) serving Qwen3-Reranker-0.6B-seq-cls directly. Pinned immutable image tag. Fixed pod owner label (HAMi GPU binding). v1.6.3: Renamed to 'AIM Qwen3 Reranker'. v1.6.2: Fixed chart encoding (was double-gzip, broke Olares tar extraction). v1.6.1: Fixed corrupted chart in market source (base64 truncation). v1.6.0: Version bump to force Olares re-sync with fresh chart encoding. v1.5.5: Release v1.5.5. Final naming corrections and entrance status fix.
-    v1.5.1: Fixed title to show readable app name in Olares Settings. Qwen3 Reranker 0.6B.
-    v1.5.0: Version bump to force Olares re-sync.
-    v1.3.5: Tailored Blackwell SM120 GPU optimization (FlashInfer attention + FP8 KV-cache).
-    v1.2.5: Added proxy port 30001 to service, updated rerank proxy with aiohttp (Cohere/Jina→/classify), fixed YAML parsing in dashboard-configmap.
-    v1.2.2: Removed --task score arg (not supported by vllm api_server.py entrypoint). Fixed YAML indentation in dashboard-configmap.yaml.
-    v1.2.0: Stable production release. All features tested and verified.
-    v1.1.9: Added rerank-proxy container (Python aiohttp) that translates Cohere/Jina /v1/rerank API to vLLM /classify API. Extracted ConfigMaps from inline deployment.yaml into separate template files (proxy-configmap.yaml, dashboard-configmap.yaml). Dashboard now routes through proxy port 30001 instead of directly to vLLM.
-    v1.1.8: Switched to tomaarsen/Qwen3-Reranker-0.6B-seq-cls sequence classification model. Added --task score for native vLLM /v1/rerank endpoint (Cohere/Jina-compatible). Removed need for rerank proxy.
-    v1.1.7: Switched vllm image from pinned v0.10.0 back to latest for best RTX 5090 Mobile (Blackwell/SM120) compatibility. vLLM official images now include upstream Blackwell support.
-    v1.1.6: Bumped all versions to 1.1.6 for Olares consistency. Pinned vllm image to v0.10.0. Extracted dashboard ConfigMap from deployment.yaml for cleaner Helm chart.
-    v1.1.5: Restructured Helm chart into aimrerqwen3vllm/ subdirectory. Set livenessProbe initialDelay to 1200s for reliable startup.
-    v1.1.4: Fixed K8s resource naming. All deployments, services, and labels now use app name "aimrerqwen3vllm" instead of "reranker" for proper Olares integration.
-    v1.1.3: Fixed OlaresManifest structure to match Olares spec v0.10.0. Moved resource fields to spec section. Fixed manifest version compatibility.
-    v1.1.1: Fixed missing icon in installed apps. Added icon URL to entrances and switched to raw.githubusercontent.com CDN.
-    v1.1.0: Switched inference engine from SGLang to vllm. Renamed app to aimrerqwen3vllm. Updated all metadata and chart to reflect vllm backend.
+    Initial Release for AImighty Olares One
   fullDescription: |
     Aimighty Reranker deploys Qwen3-Reranker-0.6B using vLLM on NVIDIA RTX 5090 (Blackwell).
 
