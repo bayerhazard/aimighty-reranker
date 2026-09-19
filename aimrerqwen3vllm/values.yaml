@@ -1,6 +1,6 @@
 image:
   repository: vllm/vllm-openai
-  tag: v0.26.0-cu129
+  tag: v0.29.0-cu129
   pullPolicy: IfNotPresent
 nginx:
   image: nginx:alpine
