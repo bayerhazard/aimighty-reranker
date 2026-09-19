@@ -76,3 +76,18 @@ Verifiziert über den Proxy mit RAGFlow-Request-Shape:
 Bis der Proxy ausgerollt ist, bleibt der Reranker in RAGFlow **besser
 deaktiviert** (Skill `olares-ragflow`: `rerank_id` leer, `vec 0.6`, `keyword`,
 `thr 0.2` → rec@1 5/6).
+
+## Post-Fix-Verifikation (App 26.9.6, 2026-09-19)
+- Über den Olares-Entrance (rohe Cohere-Anfrage): relevanter Doc **0.9999**,
+  irrelevanter **0.0000** (vorher 0.30 / 0.12).
+- Diskrimination im echten Korpus (Frage „Welche Sozialversicherungsnummer hat
+  Marc Bayer?"): Sozialversicherungsausweis **0.9995**, TK-Anmeldebestätigung
+  **0.9973** (enthält dieselbe Nummer → beide valide), Reise-Tagebuch
+  (irrelevant) **0.0000**.
+- RAGFlow-A/B (6 Fragen): mit Rerank rec@1 **5/6**, MRR 0.86 (vorher **0/6**).
+  Der verbleibende „Rückstand" gegenüber ohne Rerank (MRR 0.92) ist eine
+  **mehrdeutige Ground-Truth** — das TK-Dokument enthält dieselbe
+  Sozialversicherungsnummer; der Embedder rangierte diese valide Quelle zufällig
+  auf #1. Kein Qualitätsverlust bei der Antwort.
+- **Fazit:** Rerank liefert jetzt kalibrierte Scores und ist in den Assistenten
+  (Tier 2) aktiv. Tier 1 (MCP/Helper) bleibt bewusst ohne Rerank (~2 s schneller).
