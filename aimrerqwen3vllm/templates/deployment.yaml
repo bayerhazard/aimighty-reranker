@@ -74,14 +74,27 @@ spec:
         - --trust-remote-code
         - --no-enable-log-requests
         env:
+        - name: CUDA_DEVICE_MEMORY_LIMIT_0
+          value: "4096m"
         {{- range $key, $value := .Values.env }}
+        {{- if ne $key "CUDA_DEVICE_MEMORY_LIMIT_0" }}
         - name: {{ $key }}
           value: {{ $value | quote }}
+        {{- end }}
         {{- end }}
         ports:
         - containerPort: {{ .Values.apiPort }}
         resources:
-          {{- toYaml .Values.resources | nindent 10 }}
+          limits:
+            cpu: "4"
+            memory: 12Gi
+            nvidia.com/gpu: "1"
+            nvidia.com/gpumem: "4096"
+          requests:
+            cpu: "1"
+            memory: 3Gi
+            nvidia.com/gpu: "1"
+            nvidia.com/gpumem: "4096"
         volumeMounts:
         - mountPath: {{ .Values.volumes.hfCache.mountPath }}
           name: hf-cache
