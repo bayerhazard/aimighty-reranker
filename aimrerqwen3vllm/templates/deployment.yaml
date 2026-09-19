@@ -122,26 +122,31 @@ spec:
       # Template proxy: wraps query/documents in the Qwen3-Reranker prompt, then
       # forwards to vLLM /rerank (raw input yields miscalibrated scores).
       - name: rerank-proxy
-        image: "{{ .Values.rerankProxy.image }}"
+        image: "python:3.12-slim"
         imagePullPolicy: IfNotPresent
         command:
         - python3
         - /scripts/rerank-proxy.py
         env:
         - name: PORT
-          value: {{ .Values.rerankProxy.port | quote }}
+          value: "8010"
         - name: VLLM_URL
-          value: {{ .Values.rerankProxy.vllmUrl | quote }}
+          value: "http://127.0.0.1:30000/v1"
         - name: RERANK_INSTRUCT
-          value: {{ .Values.rerankProxy.instruct | quote }}
+          value: "Given a web search query, retrieve relevant passages that answer the query"
         ports:
-        - containerPort: {{ .Values.rerankProxy.port }}
+        - containerPort: 8010
         resources:
-          {{- toYaml .Values.rerankProxy.resources | nindent 10 }}
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 20m
+            memory: 32Mi
         readinessProbe:
           httpGet:
             path: /health
-            port: {{ .Values.rerankProxy.port }}
+            port: 8010
           initialDelaySeconds: 3
           periodSeconds: 20
           timeoutSeconds: 5

@@ -4,22 +4,9 @@ image:
   pullPolicy: IfNotPresent
 nginx:
   image: nginx:alpine
-# Tiny stdlib-only sidecar that applies the Qwen3-Reranker instruction template
-# before calling vLLM /rerank. vLLM 0.29 has no score template for
-# Qwen3ForSequenceClassification, so raw query+document scores are miscalibrated
-# (~0.30/0.12 instead of ~0.9997/0.0001) and RAGFlow's hybrid blend degrades.
-rerankProxy:
-  image: python:3.12-slim
-  port: 8010
-  vllmUrl: http://127.0.0.1:30000/v1
-  instruct: "Given a web search query, retrieve relevant passages that answer the query"
-  resources:
-    limits:
-      cpu: 500m
-      memory: 128Mi
-    requests:
-      cpu: 20m
-      memory: 32Mi
+# NOTE: the rerank template proxy (container + port 8010 + nginx route) is
+# hardcoded in the templates on purpose - the Olares values-freeze would
+# otherwise render new .Values keys as nil on upgrade.
 workloads:
   aimrerqwen3vllm:
     replicaCount: 1
