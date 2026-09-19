@@ -119,6 +119,36 @@ spec:
           subPath: nginx.conf
         - mountPath: /usr/share/nginx/html
           name: dashboard-html
+      # Template proxy: wraps query/documents in the Qwen3-Reranker prompt, then
+      # forwards to vLLM /rerank (raw input yields miscalibrated scores).
+      - name: rerank-proxy
+        image: "{{ .Values.rerankProxy.image }}"
+        imagePullPolicy: IfNotPresent
+        command:
+        - python3
+        - /scripts/rerank-proxy.py
+        env:
+        - name: PORT
+          value: {{ .Values.rerankProxy.port | quote }}
+        - name: VLLM_URL
+          value: {{ .Values.rerankProxy.vllmUrl | quote }}
+        - name: RERANK_INSTRUCT
+          value: {{ .Values.rerankProxy.instruct | quote }}
+        ports:
+        - containerPort: {{ .Values.rerankProxy.port }}
+        resources:
+          {{- toYaml .Values.rerankProxy.resources | nindent 10 }}
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.rerankProxy.port }}
+          initialDelaySeconds: 3
+          periodSeconds: 20
+          timeoutSeconds: 5
+        volumeMounts:
+        - mountPath: /scripts
+          name: rerank-proxy
+          readOnly: true
       volumes:
       - hostPath:
           path: "{{ .Values.userspace.appData }}/aimrerqwen3vllm/hf-cache"
@@ -137,3 +167,7 @@ spec:
       - configMap:
           name: aimrerqwen3vllm-dashboard
         name: dashboard-html
+      - configMap:
+          name: aimrerqwen3vllm-rerank-proxy
+          defaultMode: 0555
+        name: rerank-proxy

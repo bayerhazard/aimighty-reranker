@@ -16,15 +16,15 @@ data:
             proxy_pass http://localhost:{{ .Values.apiPort }}/health;
         }
         location /v1/rerank {
-            proxy_pass http://localhost:{{ .Values.apiPort }}/v1/rerank;
+            proxy_pass http://localhost:{{ .Values.rerankProxy.port }}/v1/rerank;
             proxy_read_timeout 600s;
         }
         location /rerank {
-            proxy_pass http://localhost:{{ .Values.apiPort }}/rerank;
+            proxy_pass http://localhost:{{ .Values.rerankProxy.port }}/rerank;
             proxy_read_timeout 600s;
         }
         location /v2/rerank {
-            proxy_pass http://localhost:{{ .Values.apiPort }}/v2/rerank;
+            proxy_pass http://localhost:{{ .Values.rerankProxy.port }}/v1/rerank;
             proxy_read_timeout 600s;
         }
         location /v1/score {

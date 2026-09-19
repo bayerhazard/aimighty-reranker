@@ -1,6 +1,6 @@
 apiVersion: v2
-appVersion: 26.9.4
-description: Qwen3-Reranker-0.6B via vLLM — native /v1/rerank (Jina/Cohere compatible)
+appVersion: 26.9.5
+description: Qwen3-Reranker-0.6B via vLLM with Qwen3 template proxy (Jina/Cohere compatible)
 home: https://github.com/bayerhazard/aimighty-reranker
 keywords:
 - ai
@@ -16,4 +16,4 @@ name: aimrerqwen3vllm
 sources:
 - https://github.com/bayerhazard/aimighty-reranker
 type: application
-version: 26.9.4
+version: 26.9.5
