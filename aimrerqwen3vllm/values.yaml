@@ -18,9 +18,12 @@ resources:
     cpu: '4'
     memory: 12Gi
     nvidia.com/gpu: '1'
+    nvidia.com/gpumem: '4096'
   requests:
     cpu: '1'
     memory: 3Gi
+    nvidia.com/gpu: '1'
+    nvidia.com/gpumem: '4096'
 nginxResources:
   limits:
     cpu: 200m
@@ -30,7 +33,7 @@ nginxResources:
     memory: 32Mi
 env:
   HF_HOME: /root/.cache/huggingface
-  CUDA_DEVICE_MEMORY_LIMIT_0: "3584m"
+  CUDA_DEVICE_MEMORY_LIMIT_0: "4096m"
 vllmArgs:
   model: tomaarsen/Qwen3-Reranker-0.6B-seq-cls
   dtype: bfloat16

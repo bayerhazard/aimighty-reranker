@@ -11,7 +11,7 @@ metadata:
   description: Qwen3-Reranker-0.6B via vLLM — native /v1/rerank (Jina/Cohere compatible)
   appid: aimrerqwen3vllm
   title: AIM Qwen3 0.6B Reranker
-  version: '26.9.2'
+  version: '26.9.3'
   categories:
     - AI
 
@@ -25,8 +25,9 @@ entrances:
     authLevel: internal
 
 spec:
-  versionName: '26.9.2'
+  versionName: '26.9.3'
   upgradeDescription: |
+    v26.9.3: HAMi memory-slice pinned to 4 GiB (nvidia.com/gpumem) and the CUDA soft cap aligned to 4096m so the RTX 5090 on olares-worker can host OmniVoice TTS, Qwen3-ASR, PaddleOCR and the Qwen3 Reranker co-resident. Built for Olares 1.12.6.
     v26.9.2: vLLM v0.26.0 -> v0.29.0 (Model Runner V2 default, ~2-3x faster rerank, benchmarked).
     v26.9.1: Initial Release for AImighty Olares One
   fullDescription: |
@@ -41,7 +42,7 @@ spec:
     - 2 containers only (vLLM + dashboard); no proxy sidecar
 
     **Resource Usage**
-    GPU: 4 GB VRAM (NVIDIA RTX 5090 or compatible)
+    GPU: 4 GiB HAMi memory slice (NVIDIA RTX 5090, co-resident with OmniVoice TTS, Qwen3-ASR and PaddleOCR)
     RAM: 12 GB
     Disk: 10 GB
 

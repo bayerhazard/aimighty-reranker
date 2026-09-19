@@ -1,19 +1,20 @@
----
 olaresManifest.version: '0.12.0'
 olaresManifest.type: app
 apiVersion: 'v3'
 
 workloadReplicas:
   aimrerqwen3vllm: 1
+
 metadata:
   name: aimrerqwen3vllm
   icon: https://raw.githubusercontent.com/bayerhazard/aimighty-reranker/main/icon.png
   description: Qwen3-Reranker-0.6B via vLLM — native /v1/rerank (Jina/Cohere compatible)
   appid: aimrerqwen3vllm
   title: AIM Qwen3 0.6B Reranker
-  version: '26.9.2'
+  version: '26.9.3'
   categories:
     - AI
+
 entrances:
   - name: aimrerqwen3vllm
     port: 8080
@@ -22,22 +23,26 @@ entrances:
     icon: https://raw.githubusercontent.com/bayerhazard/aimighty-reranker/main/icon.png
     openMethod: window
     authLevel: internal
+
 spec:
-  versionName: '26.9.2'
+  versionName: '26.9.3'
   upgradeDescription: |
-    Initial Release for AImighty Olares One
+    v26.9.3: HAMi memory-slice pinned to 4 GiB (nvidia.com/gpumem) and the CUDA soft cap aligned to 4096m so the RTX 5090 on olares-worker can host OmniVoice TTS, Qwen3-ASR, PaddleOCR and the Qwen3 Reranker co-resident. Built for Olares 1.12.6.
+    v26.9.2: vLLM v0.26.0 -> v0.29.0 (Model Runner V2 default, ~2-3x faster rerank, benchmarked).
+    v26.9.1: Initial Release for AImighty Olares One
   fullDescription: |
-    Aimighty Reranker deploys Qwen3-Reranker-0.6B using vllm on NVIDIA RTX 5090 (Blackwell).
+    Aimighty Reranker deploys Qwen3-Reranker-0.6B using vLLM on NVIDIA RTX 5090 (Blackwell).
 
     **Features**
-    - /v1/rerank endpoint (OpenAI-compatible)
+    - /v1/rerank endpoint (native vLLM, Jina/Cohere compatible)
     - Live monitoring dashboard on port 8080
-    - FlashInfer attention backend optimized for SM120
+    - vLLM v0.29.0-cu129 (pinned, immutable)
     - Prometheus metrics via /metrics
     - Optimized: 4 GB GPU, 12 GB RAM
+    - 2 containers only (vLLM + dashboard); no proxy sidecar
 
     **Resource Usage**
-    GPU: 4 GB VRAM (NVIDIA RTX 5090 or compatible)
+    GPU: 4 GiB HAMi memory slice (NVIDIA RTX 5090, co-resident with OmniVoice TTS, Qwen3-ASR and PaddleOCR)
     RAM: 12 GB
     Disk: 10 GB
 
@@ -48,19 +53,20 @@ spec:
     - en-US
   supportArch:
     - amd64
-  limitedCpu: 4
-  requiredCpu: 1
+  requiredCpu: "1"
+  limitedCpu: "4"
   requiredMemory: 4Gi
   limitedMemory: 12Gi
   requiredDisk: 10Gi
-  requiredGpu: 1Gi
-  limitedGpu: 24Gi
+  requiredGpu: 1
+
 permission:
   appData: true
+
 options:
   apiTimeout: 3600
+  allowMultipleInstall: false
   dependencies:
     - name: olares
       version: '>=1.12.6-0'
       type: system
-  allowMultipleInstall: false
