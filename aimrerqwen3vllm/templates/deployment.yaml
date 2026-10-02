@@ -46,6 +46,23 @@ spec:
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
+      # Model Console (llm-init) runs as UID 1000 and must own its shared cache
+      # + run-state dirs; the hostPath mounts arrive root-owned.
+      - name: init-chown
+        image: docker.io/beclab/aboveos-busybox:1.37.0
+        imagePullPolicy: IfNotPresent
+        command:
+        - sh
+        - -c
+        - "mkdir -p /cache/hf/hub/.locks /run/llm-init && chown -R 1000:1000 /cache/hf/hub /run/llm-init || true"
+        volumeMounts:
+        - name: llm-init-cache
+          mountPath: /cache/hf/hub
+        - name: llm-init-run
+          mountPath: /run/llm-init
+        securityContext:
+          runAsUser: 0
+        resources: {}
       containers:
       # vllm Inference Engine (native /v1/rerank, no proxy)
       - name: aimrerqwen3vllm
