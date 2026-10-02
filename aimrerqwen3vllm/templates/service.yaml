@@ -18,3 +18,39 @@ spec:
     protocol: TCP
   selector:
     app: aimrerqwen3vllm
+---
+# Model Console control/data plane (llm-init): dashboard on "/", engine /v1/*
+# reverse-proxied; authLevel internal.
+apiVersion: v1
+kind: Service
+metadata:
+  name: download-svc
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: aimrerqwen3vllm
+spec:
+  selector:
+    app: aimrerqwen3vllm
+  ports:
+  - name: http
+    port: 8090
+    targetPort: 8090
+    protocol: TCP
+---
+# The Service behind the sharedEntrances stub: :80 -> llm-init:8090,
+# in-cluster only (no edge, no SSO).
+apiVersion: v1
+kind: Service
+metadata:
+  name: sharedentrances-api
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: aimrerqwen3vllm
+spec:
+  selector:
+    app: aimrerqwen3vllm
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8090
+    protocol: TCP

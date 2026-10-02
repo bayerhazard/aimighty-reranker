@@ -132,6 +132,8 @@ spec:
           value: "8010"
         - name: VLLM_URL
           value: "http://127.0.0.1:30000/v1"
+        - name: MODEL_NAME
+          value: "Qwen/Qwen3-Reranker-0.6B"
         - name: RERANK_INSTRUCT
           value: "Given a web search query, retrieve relevant passages that answer the query"
         ports:
@@ -154,11 +156,88 @@ spec:
         - mountPath: /scripts
           name: rerank-proxy
           readOnly: true
+      # Model Console (llm-init): provides /api/model-spec + the Router-visible
+      # /v1 surface. ENGINE_KIND=rerank proxies to the sibling rerank-proxy via
+      # LLM_INIT_TEST_ENGINE_URL (no service rename needed). It downloads the
+      # model into the shared appCommon HF cache (redundant with vLLM's own
+      # weights, but that is what Model Console requires).
+      - name: llm-init
+        image: "docker.io/beclab/llm-init:v1.7.12"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: ENGINE_KIND
+          value: "rerank"
+        - name: LLM_INIT_TEST_ENGINE_URL
+          value: "http://127.0.0.1:8010"
+        - name: MODEL_NAME
+          value: "Qwen/Qwen3-Reranker-0.6B"
+        - name: MODEL_MODE
+          value: "rerank"
+        - name: MODEL_SUPPORTS
+          value: ""
+        - name: MODEL_SOURCE
+          value: "hf://tomaarsen/Qwen3-Reranker-0.6B-seq-cls"
+        - name: HF_HOME
+          value: /cache/hf
+        - name: HF_HUB_CACHE
+          value: /cache/hf/hub
+        - name: HUGGINGFACE_HUB_CACHE
+          value: /cache/hf/hub
+        {{- if .Values.olaresEnv.HF_ENDPOINT }}
+        - name: HF_ENDPOINT
+          value: "{{ .Values.olaresEnv.HF_ENDPOINT }}"
+        {{- end }}
+        {{- if .Values.olaresEnv.HF_TOKEN }}
+        - name: HF_TOKEN
+          value: "{{ .Values.olaresEnv.HF_TOKEN }}"
+        {{- end }}
+        - name: RUN_DIR
+          value: /run/llm-init
+        - name: PORT
+          value: "8090"
+        - name: LOG_LEVEL
+          value: "info"
+        ports:
+        - containerPort: 8090
+        readinessProbe:
+          httpGet:
+            path: /livez
+            port: 8090
+          initialDelaySeconds: 3
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /livez
+            port: 8090
+          periodSeconds: 30
+          timeoutSeconds: 5
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 4Gi
+        volumeMounts:
+        - name: llm-init-cache
+          mountPath: /cache/hf/hub
+        - name: llm-init-run
+          mountPath: /run/llm-init
       volumes:
       - hostPath:
           path: "{{ .Values.userspace.appData }}/aimrerqwen3vllm/hf-cache"
           type: DirectoryOrCreate
         name: hf-cache
+      - hostPath:
+          path: "{{ .Values.userspace.appCommon }}/huggingface"
+          type: DirectoryOrCreate
+        name: llm-init-cache
+      - hostPath:
+          path: "{{ .Values.userspace.appCache }}/llm-init-run/aimrerqwen3vllm"
+          type: DirectoryOrCreate
+        name: llm-init-run
       - emptyDir:
           medium: Memory
           sizeLimit: {{ .Values.volumes.dshm.sizeLimit }}

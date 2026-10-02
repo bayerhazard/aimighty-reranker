@@ -30,6 +30,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 VLLM_URL = os.environ.get("VLLM_URL", "http://127.0.0.1:30000/v1").rstrip("/")
 PORT = int(os.environ.get("PORT", "8080"))
+MODEL_NAME = os.environ.get("MODEL_NAME", "Qwen/Qwen3-Reranker-0.6B")
 INSTRUCT = os.environ.get(
     "RERANK_INSTRUCT",
     "Given a web search query, retrieve relevant passages that answer the query",
@@ -72,7 +73,10 @@ class Handler(BaseHTTPRequestHandler):
         if path in ("/health", "/healthz"):
             return self._json(200, {"status": "ok"})
         if path in ("/v1/models", "/models"):
-            return self._json(200, {"object": "list", "data": []})
+            return self._json(200, {
+                "object": "list",
+                "data": [{"id": MODEL_NAME, "object": "model", "owned_by": "aimighty"}],
+            })
         return self._json(404, {"error": "not found"})
 
     def do_POST(self):
