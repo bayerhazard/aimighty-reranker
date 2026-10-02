@@ -36,6 +36,7 @@ entrances:
 
 spec:
   versionName: '26.9.7'
+  onlyAdmin: true
   upgradeDescription: |
     v26.9.7: Olares Router integration. A beclab/llm-init sidecar now fronts the app (ENGINE_KIND=rerank, MODEL_MODE=rerank) and exposes the Model Console contract (/api/model-spec on the shared entrance), so Router auto-registers the model and fills default-rerank. The rerank-proxy now lists the served model on /v1/models (Model Console readiness probe). Inference path, template proxy and rerank quality are unchanged. Built for Olares 1.12.7.
     v26.9.6: Same fix as v26.9.5, with the proxy values hardcoded in the templates (values-freeze workaround).
