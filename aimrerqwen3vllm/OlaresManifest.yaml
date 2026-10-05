@@ -11,7 +11,7 @@ metadata:
   description: Qwen3-Reranker-0.6B via vLLM with Qwen3 instruction template proxy (Jina/Cohere compatible)
   appid: aimrerqwen3vllm
   title: AIM Qwen3 0.6B Reranker
-  version: '26.9.10'
+  version: '26.9.11'
   categories:
     - AI
 
@@ -35,7 +35,7 @@ entrances:
     authLevel: internal
 
 spec:
-  versionName: '26.9.10'
+  versionName: '26.9.11'
   onlyAdmin: true
   upgradeDescription: |
     v26.9.10: CPU request right-sized (requiredCpu 1 -> 300m; measured peak 0.14 cores) so the app fits the worker node CPU-request budget. No behavior change. Built for Olares 1.12.7.

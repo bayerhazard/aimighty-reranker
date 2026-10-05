@@ -108,7 +108,7 @@ spec:
             nvidia.com/gpu: "1"
             nvidia.com/gpumem: "4096"
           requests:
-            cpu: "1"
+            cpu: "300m"
             memory: 3Gi
             nvidia.com/gpu: "1"
             nvidia.com/gpumem: "4096"
